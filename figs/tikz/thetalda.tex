@@ -1,0 +1,88 @@
+\documentclass[scrbook,border=10pt]{standalone}
+
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usepackage{varwidth}
+\usetikzlibrary{shapes,arrows}
+
+%%%<
+\usepackage{verbatim}
+% \usepackage[active,tightpage]{preview}
+% \PreviewEnvironment{tikzpicture}
+% \setlength\PreviewBorder{5pt}%
+%%%>
+
+\begin{comment}
+:Title: Simple flow chart
+:Tags: Diagrams
+
+With PGF/TikZ you can draw flow charts with relative ease. This flow chart from [1]_
+outlines an algorithm for identifying the parameters of an autonomous underwater vehicle model. 
+
+Note that relative node
+placement has been used to avoid placing nodes explicitly. This feature was
+introduced in PGF/TikZ >= 1.09.
+
+.. [1] Bossley, K.; Brown, M. & Harris, C. Neurofuzzy identification of an autonomous underwater vehicle `International Journal of Systems Science`, 1999, 30, 901-913 
+
+
+\end{comment}
+
+\def\foldedpaper#1{
+    \tikz[scale=#1,line width={#1*1pt}]{
+        \def\a{1.41} % relative height
+        \def\b{0.2}  % relative height/width of corner
+        \def\c{0.1}  % relative margin width (on either side)
+        \def\d{0.05} % vertical offset of lines
+        \def\N{6}    % number of lines
+        \draw         (0,0)
+                --  ++(-1,0)
+                --  ++(0,\a)
+                --  ++(1-\b,0)
+                --  ++(\b,-\b)
+                -- cycle;
+        \foreach \lnum in {1,...,\N}{
+            \pgfmathsetmacro\yline{\a-\d-\lnum*\a/(\N+1)}
+            \draw (-1+\c,\yline) -- (-\c,\yline);
+        }
+        \draw[fill=white] (0,\a-\b) -- ++(-\b,0) -- ++ (0,\b);
+    }
+}
+\begin{document}
+\pagestyle{empty}
+
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=24em, align=centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em]
+    
+\begin{tikzpicture}[node distance = 2cm, auto]
+    % Place nodes
+    \node [block][label={[label distance=.5em]90:Tweet}] (init) { Having tonsillitis and coughing for a straight hour ain't no fun.... my throat is raw! Thank god for antibiotics and pain meds.};
+%     \node [cloud, left of=init] (expert) {expert};
+%     \node [cloud, right of=init] (system) {system};
+    \node [block, below of=init][label={[label distance=.2em]-90:$\Theta_{lda}$}] (identify) {{\begin{varwidth}{4cm}\textless Sickness=0.45,Depression=0.27,\\
+    Flu=0.09,Recovery=0.04,Sad=0.045,Headache=0.09\textgreater\end{varwidth}}};
+     \path [line] (init) -- (identify);
+%     \node [block, below of=identify] (evaluate) {evaluate candidate models};
+%     \node [block, left of=evaluate, node distance=3cm] (update) {update model};
+%     \node [decision, below of=evaluate] (decide) {is best candidate better?};
+%     \node [block, below of=decide, node distance=3cm] (stop) {stop};
+%     % Draw edges
+%     \path [line] (identify) -- (evaluate);
+%     \path [line] (evaluate) -- (decide);
+%     \path [line] (decide) -| node [near start] {yes} (update);
+%     \path [line] (update) |- (identify);
+%     \path [line] (decide) -- node {no}(stop);
+%     \path [line,dashed] (expert) -- (init);
+%     \path [line,dashed] (system) -- (init);
+%     \path [line,dashed] (system) |- (evaluate);
+\end{tikzpicture}
+
+
+\end{document}

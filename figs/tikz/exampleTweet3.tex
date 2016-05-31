@@ -1,0 +1,27 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+\usepackage{verbatim}
+\begin{document}
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, text width=4.5em, text centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, text width=24em, text centered, minimum height=4em, anchor=north]
+\tikzstyle{block2} = [rectangle, draw, fill=blue!10, text width=26em, text centered, rounded corners, minimum height=4em, anchor=north]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,minimum height=2em]
+
+\begin{tikzpicture}[node distance = 2cm, auto]
+	\node [block][label={[label distance=.1em]-90:Example tweet}] (tweet) {``\emph{Having tonsillitis and coughing for a straight hour ain't no fun.... my throat is raw! Thank god for antibiotics and pain meds}."};
+	\node [block2, below=8mm, xshift=8mm][label={[label distance=.1em]-90:Topic vector, $\theta$, produced by LDA}] (lda) at (tweet.south) {\textless Sickness (0.45), Depression (0.27), Flu (0.09), Recovery (0.04), Sad (0.04), Headache (0.09)\ldots\textgreater};
+
+	\node [block2, below=30mm, xshift=8mm][label={[label distance=.1em]-90:Topic vector, $\Theta$, produced by ATAM}] (atam) at (tweet.south) {\textless ThroatInfection (0.57), Generosity (0.14), Doctor (0.07),
+Weekend (0.07), Flu (0.07), Sick-Leave (0.07)\ldots\textgreater
+};
+	\node[] (marker) at (tweet.south west){};
+	\draw [line] (tweet.south west) -- (marker|-lda) -- (lda.west);
+	\path [line] (tweet.south west) -- (marker|-atam) -- (atam.west);
+\end{tikzpicture}
+
+
+\end{document}

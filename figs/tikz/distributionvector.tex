@@ -1,0 +1,202 @@
+\documentclass[scrbook,border=10pt]{standalone}
+
+\newcommand{\comment}[1]{}
+\def\one{1}
+\def\two{2}
+\def\three{3}
+
+\usepackage{tikz}
+\usepackage{varwidth}
+\usetikzlibrary{positioning,calc,shadows,patterns,snakes}
+
+\makeatletter
+\pgfdeclareshape{document}{
+\inheritsavedanchors[from=rectangle] % this is nearly a rectangle
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{east}
+\inheritanchor[from=rectangle]{south east}
+\inheritanchor[from=rectangle]{south west}
+% ... and possibly more
+\backgroundpath{% this is new
+% store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+% compute corner of ‘‘flipped page’’
+\pgf@xc=\pgf@xb \advance\pgf@xc by-3.5pt % this should be a parameter
+\pgf@yc=\pgf@yb \advance\pgf@yc by-3.5pt
+% construct main path
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+\pgfpathclose
+% add little corner
+\pgfpathmoveto{\pgfpoint{\pgf@xc}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yc}}
+\pgfpathlineto{\pgfpoint{\pgf@xc}{\pgf@yc}}
+}
+}
+\makeatother
+
+\def\foldedpaper#1{
+    \tikz[scale=#1,line width={#1*1pt}]{
+        \def\a{1.41} % relative height
+        \def\b{0.2}  % relative height/width of corner
+        \def\c{0.1}  % relative margin width (on either side)
+        \def\d{0.05} % vertical offset of lines
+        \def\N{6}    % number of lines
+        \draw         (0,0)
+                --  ++(-1,0)
+                --  ++(0,\a)
+                --  ++(1-\b,0)
+                --  ++(\b,-\b)
+                -- cycle;
+        \foreach \lnum in {1,...,\N}{
+            \pgfmathsetmacro\yline{\a-\d-\lnum*\a/(\N+1)}
+            \draw (-1+\c,\yline) -- (-\c,\yline);
+        }
+        \draw[fill=white] (0,\a-\b) -- ++(-\b,0) -- ++ (0,\b);
+    }
+}
+
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{ground}=[fill,pattern=north east lines,draw=none,minimum width=5,minimum height=0.6]
+\coordinate (posTweets) at (0,0);
+\node (mytweets) [
+  shape=document,
+  double copy shadow={
+    shadow xshift=-0.5ex,
+    shadow yshift=-0.5ex
+  },
+  draw,
+  fill=white,
+  line width=1pt,
+  text width=1cm,
+  minimum height=1.5cm,
+  minimum width=1.4cm
+  ] at (posTweets) {tweets};
+
+\coordinate (box2) at (1.3,2);
+
+\foreach \j in {1,2,3}{
+  
+\ifx\j\one
+\newcommand{\region}{california}
+\else
+\ifx\j\two
+\newcommand{\region}{dublin}
+\else
+\newcommand{\region}{jakarta}
+\fi
+\fi
+	\coordinate (posSeg) at ($(box2)-(0,\j)$);
+	
+	\draw [decorate,decoration={brace,amplitude=3.5pt},xshift=\j*1.8] 
+	($(posSeg)+(0.4,-0.5)$) -- ($(posSeg)+(0.4,+0.4)$) node [black,midway,xshift=-0.6cm,yshift=-0.2em] {\tiny \region};
+	
+	\foreach \i in {1,2}{
+
+\ifx\i\one
+\newcommand{\timegranularity}{October}
+\else
+\newcommand{\timegranularity}{November}
+\fi
+
+\ifx\j\one
+
+\ifx\i\one
+\newcommand{\tweet}{depression:0.23\\pains:0.16\\sleep disorders:0.09}
+\else
+\newcommand{\tweet}{depression:0.24\\pains:0.16\\throat infection:0.09}
+\fi
+
+\else
+
+\ifx\j\two
+
+\ifx\i\one
+\newcommand{\tweet}{diabetes:0.1 \\overweight:0.1 \\aches:0.01}
+\else
+\newcommand{\tweet}{overweight:0.1\\aches:0.09\\allergies:0.08}
+\fi
+
+\else
+
+\ifx\i\one
+\newcommand{\tweet}{skin:0.14\\reaction:0.07\\aches:0.06}
+\else
+\newcommand{\tweet}{cold:0.1\\anxiety:0.04\\reactions:0.04}
+\fi
+
+\fi
+\fi
+\ifx\i\one
+\newcommand{\mul}{1.8}
+\else
+ \newcommand{\mul}{2.2}
+ \fi
+
+		\node (anch) [
+		font=\fontsize{1}{2.5}\selectfont
+		  align=left
+		  shape=document,
+		  double copy shadow={
+		    shadow xshift=-0ex,
+		    shadow yshift=-0.2ex
+		  },
+		  draw,
+		  fill=white,
+		  text width=6em,
+		  minimum height=1em,
+		  font=\tiny
+		  ] at ($ (posSeg)+(\mul*\i,0) $) { \tiny  \tweet };
+
+		\draw [decorate,decoration={brace,amplitude=2.5pt},xshift=0pt,yshift=-1.5pt] 
+		($(anch.south east)+(0,-0.1)$) -- ($(anch.south west)+(0,-0.1)$) node [black,midway,yshift=-0.2cm] {\tiny \timegranularity};
+	}
+
+	\foreach \k in {5.8,5.9,6.0}{
+		\node (d1) at ($(posSeg)+(\k,0)$) {};
+		\fill (d1) circle [radius=0.3pt];	
+	}
+
+\ifx\j\one
+\newcommand{\tweet}{depression:0.24\\throat infection:0.1\\joints:0.03}
+\else
+\ifx\j\two
+\newcommand{\tweet}{overweight:0.4\\heart:0.14\\shivers:0.14}
+\else
+\newcommand{\tweet}{cold:0.25\\spasm:0.125\\sinus:0.0625}
+\fi
+\fi
+	\node (anch) [
+	  align=left
+	  shape=document,
+	  double copy shadow={
+	    shadow xshift=-0ex,
+	    shadow yshift=-0.2ex
+	  },
+	  draw,
+	  fill=white,
+		  text width=6em,
+		  minimum height=1em,
+		  font=\tiny
+	  ] at ($ (posSeg)+(7.2,0) $) { \tiny \tweet };
+
+	\draw [decorate,decoration={brace,amplitude=2.5pt},xshift=0pt,yshift=-2pt] 
+	($(anch.south east)+(0,-0.1)$) -- ($(anch.south west)+(0,-0.1)$) node [black,midway,yshift=-0.2cm] {\tiny May};
+	
+}
+
+\draw [->] (mytweets.east) -- ($(box2)-(-0.05,2)$);
+
+\end{tikzpicture}
+\end{document}

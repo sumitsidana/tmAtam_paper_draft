@@ -1,0 +1,48 @@
+\section{Introduction}
+Social media has become a major source of information for analyzing
+many aspects of daily life. In particular, public health monitoring can
+be conducted on Twitter to measure the well-being of different geographic
+populations \cite{atam2}. The ability to model
+transitions for ailments and detect statements such as ``people talk
+about smoking and cigarettes before talking about respiratory
+problems'', or ``people talk about headaches and stomach ache in any
+order'', has a range of applications in syndromic surveillance such as
+measuring behavioral risk factors and triggering public health
+campaigns. 
+
+Popular probabilistic topic modeling methods such as Latent Dirichlet Allocation~\cite{lda} and
+pLSA~\cite{plsi} have a long history of successful application to news articles and academic abstracts.
+However, the short length of social media posts such as tweets  poses serious
+challenges to the efficacy of such methods~\cite{DBLP:conf/ecir/ZhaoJWHLYL11}.
+Dedicated methods, such as the Ailment Topic Aspect Model (ATAM), have thus 
+been proposed to discover ailments from tweets~\cite{atam2}.
+
+While the primary goal of probabilistic topic modeling is to learn topic models, an equally interesting objective is to examine \emph{topic transitions}.
+A temporal extention to LDA (\tmlda) was hence developed for discovering 
+the evolution of general-purpose topics in tweets~\cite{DBLP:conf/kdd/WangAB12}. 
+In this paper, we examine the feasibility of measuring and predicting ailment
+transitions in Twitter, by combining ATAM and TM-LDA into a new model,
+coined \tmatam. Our model is different from dynamic
+topic models such as~\cite{DBLP:conf/icml/BleiL06, DBLP:conf/kdd/WangM06}, as it is designed to learn topic
+transition patterns from temporally-ordered posts, while dynamic topic
+models focus on changing word distributions of topics over
+time. \tmatam learns transition parameters by minimizing the prediction error on ailment 
+distributions of consecutive periods at different temporal and geographic 
+granularities.
+
+The effectiveness of \tmatam requires to carefully model two key granularities,
+temporal and geographic. A temporal granularity that is too-fine may result in
+sparse and spurious transitions whereas a too-coarse one could miss
+valuable ailment transitions. Similarly, a too-fine geographic
+granularity may produce false positives and a too coarse one may cover
+a user population that is exposed to different weather conditions and
+miss meaningful transitions. Our experiments on a corpus of more than $500K$ health-related and geo-localized tweets
+collected over a period of 8 months, show that \tmatam outperforms \atam,
+ \tmlda and \lda in estimating temporal health-related topic transitions of different
+geographic populations. The health-related topic transitions we unveiled can be broadly classified in 2 kinds: {\em \selftransitions} are those where a health-related topic
+is mentioned continuously. {\em One-way-transitions} cover the case where
+some topics are discussed after others.
+For example, our study of tweets from Arizona revealed many self-transitions such as
+headaches and body pain. On the other hand, tweets about smoking,
+drugs and cigarettes in California, are followed by respiratory
+ailments.

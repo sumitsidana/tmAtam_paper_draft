@@ -1,0 +1,42 @@
+\section{Related Work}
+\label{sec:relwork}
+Proliferation of social media platforms such as \emph{Twitter},
+\emph{pinterest}, \emph{facebook}, \emph{tumblr} has led to their
+application to a wide array of tasks including mental health
+assessment~\cite{twitter:anorexia,twitter:violence,twitter:mental}, 
+inferring political affiliation~\cite{twitter:elec,twitter:elec2,twitter:elec3,twitter:elec4},
+brand perception~\cite{twitter:brand,twitter:brand2} etc.
+
+Social media, especially Twitter, are good sources of personal
+health~\cite{twitter:health,twitter:health2,twitter:health3,twitter:health4}.
+Previous studies on public health surveillance have attempted to
+uncover ailment topics on online
+discourse~\cite{DBLP:conf/nips/ChemuduguntaSS06,atam2} or model the
+evolution of general topics~\cite{DBLP:conf/kdd/WangAB12}. In this
+paper, we combine the best of both worlds which leads to the discovery
+of \emph{disease-\changes} for social-media active regions. We model
+the evolution of diseases within \changes and obtain significant
+improvement over the previous state of the art for public health
+surveillance using social media.
+
+We propose TM-ATAM, an approach that builds on the previously proposed
+TM-LDA for modeling general topic evolution over
+time~\cite{DBLP:conf/kdd/WangAB12}. Just like TM-LDA, TM-ATAM learns
+topic transitions over time and not topic trends. Such transitions the
+purpose of answering questions such as people talk about fever before
+talking about stomach ache. Other complementary approaches that learn
+the dynamicity of word distributions or topic trends have been
+proposed. That is the case of~\cite{DBLP:conf/icml/BleiL06} that
+models topic evolution over time as a discrete chain-style process
+where each piece is modeled using
+LDA. In~\cite{DBLP:conf/kdd/WangM06}, the authors propose a method
+that learns changing word distributions of topics over time and
+in~\cite{DBLP:conf/icdm/LinMHJD11}, the authors leverage the structure
+of a social network to learn how topics temporally evolve in a
+community. Finally, in~\cite{DBLP:conf/wsdm/SahaS12}, Non-negative
+Factorization is used for learning topic trends. Exploring the
+applicability of those complimentary approaches to the evolution of
+health topics in tweets, is a promising research direction.
+
+
+

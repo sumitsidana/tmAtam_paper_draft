@@ -1,0 +1,277 @@
+\documentclass{sig-alternate-05-2015}
+
+%--------------------------------------------------------------------
+% Package definitions
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{balance}
+\usepackage{stys/standalone}
+\usepackage{stys/relsize}
+\usepackage[caption=false, font=footnotesize]{subfig}
+
+\usepackage{url}
+\usepackage{ifthen}
+\usepackage{cite}
+\usepackage{xspace}
+\usepackage{pgfplots}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{epstopdf}
+%--------------------------------------------------------------------
+
+
+%--------------------------------------------------------------------
+% Macros
+%\newcommand{\comment}[1]{}
+\newcommand{\mf}[1]{\mathcal{#1}}
+\newcommand{\var}[1]{{\ttfamily#1}}
+\newcommand{\Tgran}{\emph{granularity($\mf T$)}\xspace}
+\newcommand{\Ggran}{\emph{granularity($\mf G$)}\xspace}
+\newcommand{\our}{\mbox{HLens}\xspace}
+\newcommand{\tmlda}{\mbox{TM--LDA}\xspace}
+\newcommand{\lda}{\mbox{LDA}\xspace}
+\newcommand{\atam}{\mbox{ATAM}\xspace}
+\newcommand{\tmatam}{\mbox{TM--ATAM}\xspace}
+\newcommand{\change}{\emph{\texttt{change-point}}\xspace}
+\newcommand{\changes}{\emph{\texttt{change-points}}\xspace}
+\newcommand{\season}{\emph{\texttt{homogenous\- time\- period}}\xspace}
+\newcommand{\seasons}{\emph{\texttt{homogenous\- time\- periods}}\xspace}
+\newcommand{\competitor}{\emph{\texttt{competitor\- topic\- model}}\xspace}
+\newcommand{\transition}{\emph{\texttt{transition\- matrix}}\xspace}
+\newcommand{\selftransition}{\mbox{stable-topic}\xspace}
+\newcommand{\selftransitions}{\mbox{stable-topics}\xspace}
+\newcommand{\titleA}{On Harnessing Social Media for Flu Predictions}
+\newcommand{\titleB}{How to stop being sick and start enjoying life}
+\newcommand{\titleC}{Flu Catcher ! It's like Bird Catcher For Flus}
+\newcommand{\titleD}{Health-Lens: Microscopic Ailment Modeling Using Social Media}
+\newcommand{\titleE}{Health Monitoring on Social Media over Time}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\DeclareMathOperator*{\argmin}{arg\!min}
+\DeclareMathOperator*{\argmax}{arg\!max}
+%--------------------------------------------------------------------
+
+
+%--------------------------------------------------------------------
+% Configs
+\graphicspath{{./figs/}}
+\DeclareGraphicsExtensions{.eps,.jpeg,.png}
+%--------------------------------------------------------------------
+
+
+\begin{document}
+
+\CopyrightYear{2016}
+\setcopyright{acmlicensed}
+\conferenceinfo{SIGIR '16,}{July      17 - 21, 2016, Pisa, Italy}
+\isbn{978-1-4503-4069-4/16/07}\acmPrice{\$15.00}
+\doi{http://dx.doi.org/10.1145/2911451.2914697}
+
+
+\title{\titleE}
+\numberofauthors{1} 
+\author{
+% 1st. author
+\alignauthor Sumit Sidana, Shashwat Mishra, Sihem Amer-Yahia,\\ Marianne Clausel, Massih-Reza Amini\\
+       \affaddr{Univ. Grenoble Alps/CNRS}\\
+       \affaddr{Grenoble, France}\\
+       \email{firstname.lastname@imag.fr}
+}
+% \numberofauthors{5} %  in this sample file, there are a *total*
+% % of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% % reasons) and the remaining two appear in the \additionalauthors section.
+% %
+% \author{
+% % You can go ahead and credit any number of authors here,
+% % e.g. one 'row of three' or two rows (consisting of one row of three
+% % and a second row of one, two or three).
+% %
+% % The command \alignauthor (no curly braces needed) should
+% % precede each author name, affiliation/snail-mail address and
+% % e-mail address. Additionally, tag each line of
+% % affiliation/address with \affaddr, and tag the
+% % e-mail address with \email.
+% %
+% % 1st. author
+% \alignauthor
+% Sumit Sidana \\
+%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%        \affaddr{Grenoble, France}\\
+%        \email{sumit.sidana@imag.fr}
+% % 2nd. author
+% \alignauthor
+% Shashwat Mishra \\
+%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%        \affaddr{Grenoble, France}\\
+%        \email{shashwat.mishra@imag.fr}
+% % 3rd. author
+% \alignauthor
+% Sihem Amer-Yahia \\
+%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%        \affaddr{Grenoble, France}\\
+%        \email{Sihem.Amer-Yahia@imag.fr}
+% \and  % use '\and' if you need 'another row' of author names
+% % 4th. author
+% \alignauthor
+% Marianne Clausel \\
+%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%        \affaddr{Grenoble, France}\\
+%        \email{marianne.clausel@imag.fr}
+% % 5th. author
+% \alignauthor
+% Massih-Reza Amini \\
+%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%        \affaddr{Grenoble, France}\\
+%        \email{massih-reza.amini@imag.fr}
+% }
+\maketitle
+
+\begin{abstract}
+    Social media has become a major source for analyzing all aspects of
+    daily life. Thanks to dedicated latent topic analysis methods such as
+    the Ailment Topic Aspect Model (\atam), public health can now be
+    observed on Twitter. In this work, we are interested in monitoring people's health over time.  Recently, Temporal-LDA (\tmlda) was proposed for
+    efficiently modeling general-purpose topic transitions over time. In
+    this paper, we propose Temporal Ailment Topic Aspect (\tmatam), a new
+    latent model dedicated to capturing transitions that involve
+    health-related topics. \tmatam learns topic transition parameters by
+    minimizing the prediction error on topic distributions between
+    consecutive posts at different time and geographic granularities. Our
+    experiments on an 8-month corpus of tweets show that it largely outperforms its predecessors.
+\end{abstract}
+
+\keywords{public health; ailments; social media; topic models}
+%
+% The code below should be generated by the tool at
+% http://dl.acm.org/ccs.cfm
+% Please copy and paste the code instead of the example below. 
+%
+
+% \begin{CCSXML}
+%     <ccs2012>
+%     <concept>
+%     <concept_id>10002944.10011123.10010916</concept_id>
+%     <concept_desc>General and reference~Measurement</concept_desc>
+%     <concept_significance>300</concept_significance>
+%     </concept>
+%     <concept>
+%     <concept_id>10002951.10003227</concept_id>
+%     <concept_desc>Information systems~Information systems applications</concept_desc>
+%     <concept_significance>500</concept_significance>
+%     </concept>
+%     <concept>
+%     <concept_id>10002951.10003260.10003282.10003292</concept_id>
+%     <concept_desc>Information systems~Social networks</concept_desc>
+%     <concept_significance>500</concept_significance>
+%     </concept>
+%     <concept>
+%     <concept_id>10002951.10003320</concept_id>
+%     <concept_desc>Information systems~Document topic models</concept_desc>
+%     <concept_significance>500</concept_significance>
+%     </concept>
+%     <concept>
+%     <concept_id>10002951.10003260.10003277.10003281</concept_id>
+%     <concept_desc>Information systems~Traffic analysis</concept_desc>
+%     <concept_significance>300</concept_significance>
+%     </concept>
+%     </ccs2012>
+% \end{CCSXML}
+% 
+% \ccsdesc[500]{Information systems~Social networks}
+% \ccsdesc[500]{Information systems~Traffic analysis}
+% \ccsdesc[500]{Information systems~Document topic models}
+% \ccsdesc[300]{Information systems~Information systems applications}
+% \ccsdesc[300]{General and reference~Measurement}
+% 
+% %
+% %  Use this command to print the description
+% %
+% \printccsdesc
+
+% We no longer use \terms command
+%\terms{Theory}
+
+%\keywords{public health, ailments, social media, topic models}
+
+\input{./sections/intro_short}
+\input{./sections/model_short}
+\input{./sections/results_short}
+\input{./sections/conclusion_short}
+
+%\section{The {\secit Body} of The Paper}
+%\subsection{Type Changes and {\subsecit Special} Characters}
+
+% Proforma: table (normal)
+%    \begin{table}
+%        \centering
+%        \caption{Frequency of Special Characters}
+%        \begin{tabular}{|c|c|l|} \hline
+%            Non-English or Math&Frequency&Comments\\ \hline
+%            \O & 1 in 1,000& For Swedish names\\ \hline
+%            $\pi$ & 1 in 5& Common in math\\ \hline
+%            \$ & 4 in 5 & Used in business\\ \hline
+%            $\Psi^2_1$ & 1 in 40,000& Unexplained usage\\
+%        \hline\end{tabular}
+%    \end{table}
+
+%% Proforma: table (wide)
+%    \begin{table*}
+%        \centering
+%        \caption{Some Typical Commands}
+%        \begin{tabular}{|c|c|l|} \hline
+%            Command&A Number&Comments\\ \hline
+%            \texttt{{\char'134}alignauthor} & 100& Author alignment\\ \hline
+%            \texttt{{\char'134}numberofauthors}& 200& Author enumeration\\ \hline
+%            \texttt{{\char'134}table}& 300 & For tables\\ \hline
+%        \texttt{{\char'134}table*}& 400& For wider tables\\ \hline\end{tabular}
+%        \end{table*}
+
+% Proforma: Math (inline)
+%    \begin{math}\lim_{n\rightarrow \infty}x=0\end{math}
+
+    % Proforma: Math (numbered)
+%    \begin{equation}\lim_{n\rightarrow \infty}x=0\end{equation}
+
+    % Proforma: Math (non numbered)
+%    \begin{equation}\lim_{n\rightarrow \infty}x=0\end{equation}
+
+% Proforma: theorem 
+%\newtheorem{theorem}{Theorem}
+%\begin{theorem}
+%    Let $f$ be continuous on $[a,b]$.  If $G$ is
+%    an antiderivative for $f$ on $[a,b]$, then
+%\begin{displaymath}\int^b_af(t)dt = G(b) - G(a).\end{displaymath}
+%\end{theorem}
+%
+
+%Proforma: definition
+%\newdef{definition}{Definition}
+%\begin{definition}
+%    If $z$ is irrational, then by $e^z$ we mean the
+%    unique number which has
+%logarithm $z$: \begin{displaymath}{\log e^z = z}\end{displaymath}
+%\end{definition}
+
+
+% Proforma: proof
+%\begin{proof}
+%    Suppose on the contrary there exists a real number $L$ such that
+%    \begin{displaymath}
+%        \lim_{x\rightarrow\infty} \frac{f(x)}{g(x)} = L.
+%    \end{displaymath}
+%    Then
+%    \begin{displaymath}
+%        l=\lim_{x\rightarrow c} f(x)
+%        = \lim_{x\rightarrow c}
+%        \left[ g{x} \cdot \frac{f(x)}{g(x)} \right ]
+%        = \lim_{x\rightarrow c} g(x) \cdot \lim_{x\rightarrow c}
+%        \frac{f(x)}{g(x)} = 0\cdot L = 0,
+%    \end{displaymath}
+%    which contradicts our assumption that $l\neq 0$.
+%\end{proof}
+
+\bibliographystyle{abbrv}
+\bibliography{./bib/references_short} 
+%\balancecolumns
+\end{document}

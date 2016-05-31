@@ -1,0 +1,211 @@
+\documentclass{sig-alternate-05-2015}
+
+%\usepackage[sorting=none]{biblatex}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{balance}
+\usepackage{stys/standalone}
+\usepackage{stys/relsize}
+\usepackage[caption=false, font=footnotesize]{subfig}
+
+\usepackage{url}
+\usepackage{ifthen}
+\usepackage{cite}
+\usepackage{xspace}
+\usepackage{pgfplots}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+%\usepackage[pdftex]{graphicx}
+\graphicspath{{./figs/}}
+\DeclareGraphicsExtensions{.eps,.jpeg,.png}
+\usepackage{epstopdf}
+\usetikzlibrary{bayesnet}
+%\newcommand{\comment}[1]{}
+\newcommand{\mf}[1]{\mathcal{#1}}
+\newcommand{\var}[1]{{\ttfamily#1}}
+\newcommand{\Tgran}{\emph{granularity($\mf T$)}\xspace}
+\newcommand{\Ggran}{\emph{granularity($\mf G$)}\xspace}
+\newcommand{\our}{\mbox{HLens}\xspace}
+\newcommand{\tmlda}{\mbox{TM--LDA}\xspace}
+\newcommand{\lda}{\mbox{LDA}\xspace}
+\newcommand{\atam}{\mbox{ATAM}\xspace}
+\newcommand{\tmatam}{\mbox{TM--ATAM}\xspace}
+\newcommand{\tatam}{\mbox{T--ATAM}\xspace}
+\newcommand{\change}{\mbox{change-point}\xspace}
+\newcommand{\changes}{\mbox{change-points}\xspace}
+\newcommand{\season}{\emph{\texttt{homogenous\- time\- period}}\xspace}
+\newcommand{\seasons}{\emph{\texttt{homogenous\- time\- periods}}\xspace}
+\newcommand{\competitor}{\emph{\texttt{competitor\- topic\- model}}\xspace}
+\newcommand{\transition}{\emph{\texttt{transition\- matrix}}\xspace}
+\newcommand{\selftransition}{\mbox{stable-topic}\xspace}
+\newcommand{\selftransitions}{\mbox{stable-topics}\xspace}
+
+\newcommand{\titleA}{On Harnessing Social Media for Flu Predictions}
+\newcommand{\titleB}{How to stop being sick and start enjoying life}
+\newcommand{\titleC}{Flu Catcher ! It's like Bird Catcher For Flus}
+\newcommand{\titleD}{Health-Lens: Microscopic Ailment Modeling Using Social Media}
+\newcommand{\titleE}{Health Monitoring on Social Media over Time}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\DeclareMathOperator*{\argmin}{arg\!min}
+\DeclareMathOperator*{\argmax}{arg\!max}
+\setlistdepth{9}
+
+\newlist{myEnumerate}{enumerate}{9}
+\setlist[myEnumerate,1]{label=(\arabic*)}
+\setlist[myEnumerate,2]{label=(\Roman*)}
+\setlist[myEnumerate,3]{label=(\Alph*)}
+\setlist[myEnumerate,4]{label=(\roman*)}
+\setlist[myEnumerate,5]{label=(\alph*)}
+\setlist[myEnumerate,6]{label=(\arabic*)}
+\setlist[myEnumerate,7]{label=(\Roman*)}
+\setlist[myEnumerate,8]{label=(\Alph*)}
+\setlist[myEnumerate,9]{label=(\roman*)}
+
+\begin{document}
+
+\conferenceinfo{WWW'16}{Montr\'eal, Canada}
+
+\title{\titleE}
+
+\numberofauthors{1} 
+\author{
+% 1st. author
+\alignauthor Sumit Sidana, Sihem Amer-Yahia, Massih-Reza Amini,\\ Marianne Clausel, Shashwat Mishra
+       \affaddr{Univ. Grenoble Alps/CNRS}\\
+       \affaddr{Grenoble, France}\\
+       \email{firstname.lastname@imag.fr}
+%% % 2nd. author				
+%% \alignauthor Shashwat Mishra\\
+%%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%%        \affaddr{Grenoble, France}\\
+%%        \email{shashwat.mishra@imag.fr}
+%% % 3rd. author
+%% \alignauthor Sihem Amer-Yahia\\
+%%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%%        \affaddr{Grenoble, France}\\
+%%        \email{Sihem.Amer-Yahia@imag.fr}
+%% % 4th. author
+%% \alignauthor Marianne Clausel\\
+%%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%%        \affaddr{Grenoble, France}\\		
+%%        \email{marianne.clausel@imag.fr}
+%% \and  % use '\and' if you need 'another row' of author names
+%% % 5th. author
+%% \alignauthor Massih-Reza Amini\\
+%%        \affaddr{Univ. Grenoble Alps/CNRS}\\
+%%        \affaddr{Grenoble, France}\\
+%%        \email{massih-reza.amini@imag.fr}
+}
+\maketitle
+
+\begin{abstract}
+Social media has become a major source for analyzing all aspects of
+daily life. Thanks to dedicated latent topic analysis methods such as
+the Ailment Topic Aspect Model (\atam), public health can now be
+observed on Twitter. In this work, we are interested in using social
+media to monitor people's health over time and enable a range of
+applications such as measuring behavioral risk factors and triggering
+health campaigns.  Recently, Temporal-LDA (\tmlda) was proposed for
+efficiently modeling general-purpose topic transitions over time. In
+this paper, we propose Temporal Ailment Topic Aspect (\tmatam), a new
+latent model dedicated to capturing transitions that involve
+health-related topics. \tmatam learns topic transition parameters by
+minimizing the prediction error on topic distributions between
+consecutive posts at different time and geographic granularities. Our
+experiments on an 8-month corpus of tweets show that \tmatam
+outperforms \tmlda in estimating transitions involving health-related
+topics for different geographic populations. Additionally, we examine
+the ability of \tmatam to determine transitions due to different
+factors such as climate, nutrition and lifestyle.
+\end{abstract}
+
+\category{H.4}{Information Systems Applications}{Miscellaneous}
+%\category{J.4}{SOCIAL AND BEHAVIORAL SCIENCES}
+\terms{Experimentation, Performance}
+\keywords{public health, ailments, social media, topic models} 
+
+\input{./long/intro}
+\input{./long/background}
+\input{./long/approaches}
+\input{./long/results}
+\input{./long/relatedwork}
+\input{./long/conclusion}
+
+\bibliographystyle{unsrt}
+\bibliography{./bib/references}
+
+% Proforma: table (normal)
+% \comment{
+% 	\begin{table}
+% 	\centering
+% 	\caption{Frequency of Special Characters}
+% 	\begin{tabular}{|c|c|l|} \hline
+% 	Non-English or Math&Frequency&Comments\\ \hline
+% 	\O & 1 in 1,000& For Swedish names\\ \hline
+% 	$\pi$ & 1 in 5& Common in math\\ \hline
+% 	\$ & 4 in 5 & Used in business\\ \hline
+% 	$\Psi^2_1$ & 1 in 40,000& Unexplained usage\\
+% 	\hline\end{tabular}
+% 	\end{table}
+% }	
+
+% Proforma: table (wide)
+% \comment{
+% 	\begin{table*}
+% 	\centering
+% 	\caption{Some Typical Commands}
+% 	\begin{tabular}{|c|c|l|} \hline
+% 	Command&A Number&Comments\\ \hline
+% 	\texttt{{\char'134}alignauthor} & 100& Author alignment\\ \hline
+% 	\texttt{{\char'134}numberofauthors}& 200& Author enumeration\\ \hline
+% 	\texttt{{\char'134}table}& 300 & For tables\\ \hline
+% 	\texttt{{\char'134}table*}& 400& For wider tables\\ \hline\end{tabular}
+% 	\end{table*}
+% }
+
+% Proforma: figure (normal)
+% \comment{
+% 	\begin{figure}
+% 	\centering
+% 	\epsfig{file=fly.eps}
+% 	\caption{A sample black and white graphic (.eps format).}
+% 	\end{figure}
+% }
+
+% Proforma: figure (wide)
+% \comment{
+% 	\begin{figure*}
+% 	\centering
+% 	\epsfig{file=flies.eps}
+% 	\caption{A sample black and white graphic (.eps format)
+% 	that needs to span two columns of text.}
+% 	\end{figure*}
+% }
+% 
+% % Proforma: theorem 
+% \comment{
+% 	\newtheorem{theorem}{Theorem}
+% 	\begin{theorem}
+% 	Let $f$ be continuous on $[a,b]$.  If $G$ is
+% 	an antiderivative for $f$ on $[a,b]$, then
+% 	\begin{displaymath}\int^b_af(t)dt = G(b) - G(a).\end{displaymath}
+% 	\end{theorem}
+% }
+% 
+% % Proforma: definition
+% \comment{
+% 	\newdef{definition}{Definition}
+% 	\begin{definition}
+% 	If $z$ is irrational, then by $e^z$ we mean the
+% 	unique number which has
+% 	logarithm $z$: \begin{displaymath}{\log e^z = z}\end{displaymath}
+% 	\end{definition}
+% }
+
+
+\end{document}

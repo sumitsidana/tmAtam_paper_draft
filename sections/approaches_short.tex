@@ -1,0 +1,84 @@
+\section{Our model and approach}
+\label{sec:approach}
+We now develop our model and use it to specify our problem more
+precisely. We then present our algorithm to address our ailment
+prediction problem.
+\subsection{\tmatam: Modeling Health Topics over Time}
+\label{subsec:model}
+We propose \tmatam that builds on top of \atam and \tmlda.
+We first convert inferences of \atam over a single document to associate with a given set of documents $D_g^t$, an ailment
+distribution, $\Theta_g^t$. We then go on to find \seasons. We model ailment transitions within each \season and when \change is 
+encountered we update these transitions.  This is a fresh departure
+from existing solutions that operate in a \season-agnostic fashion\cite{DBLP:conf/kdd/WangAB12}.
+\tmatam, at its heart, solves the following equation.
+\begin{equation}
+A_g^{t}\approx A_g^{t-1}.M
+\end{equation}
+where
+\begin{equation}
+A_g^{t-1}=\begin{pmatrix}\Theta_g^1\\\vdots\\\Theta_g^t\end{pmatrix},\,A_g^t=\begin{pmatrix}\Theta_g^2\\\vdots\\\Theta_g^{t+1}\end{pmatrix}%d_g^{t-1}=\begin{pmatrix}P_1\\\vdots\\P_t\end{pmatrix},\,d_g^t=\begin{pmatrix}P_2\\\vdots\\P_{t+1}\end{pmatrix}
+\end{equation}
+$M$ is an unknown transition matrix which has to be learned.
+To obtain the transition matrix $M$, we solve the following least squares problem.
+\[
+\min_M\|A_g^t- A_g^{t-1}.M\|_F
+\]
+\subsection{Ailment prediction problem}
+\label{subsec:problem}
+We are now ready to visit our problem: Given a set of
+documents $D_g^{t_{i-1}}$ formed by tweets originating from a region
+$g \in G$ during time period $t_{i-1}$, predict $\Theta_g^{t_i}$, the
+ailment distribution of documents in $D_g^{t_i}$, corresponding to
+posts from $g$ in period $t_i$ from $\Theta_g^{t_{i-1}}$, the ailment
+distribution of document $D_g^{t_{i-1}}$ corresponding to posts from
+$g$ during period $t_{i-1}$.
+\subsection{Algorithm}
+\label{subsec:tmalg}
+Algorithm~\ref{alg:tmatam} contains the steps of our solution. It has 
+two main parts:  \change \emph{\texttt{detection}} and \emph{\texttt{ ailment prediction}}. 
+We first describe how \changes are detected then we show how ailment topics being discussed in twitter 
+are predicted over time.
+\paragraph{Change Point Detection}
+We use $\mf Z$ to refer to the set of all health-related and non-health 
+related topics. For each region $g \in \mf G$ (Line~\ref{alg:line:start}) 
+we first run \atam over the full time period $D_g$ (Line~\ref{alg:line:atam}).
+Next for each period $t\in \mf T$ (Line~\ref{alg:line:tstart}), 
+we use the output of \atam over $D_g$ to generate 
+topic distribution $\Theta_g^t$ (Lines~\ref{alg:line:createThetaStart}--
+\ref{alg:line:createThetaEnd}).
+Next we examine the  \emph{Bhattacharya Distance} between consecutive distributions
+$\Theta_g^{t-1}$ and $\Theta_g^t$ of the region $g$ 
+to identify the most significant change point, $t_c$ (Line~\ref{alg:line:ThetaDiff}).
+The time period $t_c$ is termed as the \change for
+region $g$. The time periods preceding and succeding \change are termed as \seasons.
+\paragraph{Intra Homogenous Time Period Ailment Prediction}
+We outline in lines~\ref{alg:line:predStart}--\ref{alg:line:predEnd} 
+of Algorithm~\ref{alg:tmatam} the steps undertaken. 
+\begin{algorithm}[t]
+\caption{TM-ATAM: \change Detection and Training Ailment Distribution Predictor}
+\label{alg:tmatam}
+\begin{algorithmic}[1]
+ \ForAll {$g \in G$}\label{alg:line:start}
+ \State Run ATAM on $D_g$\label{alg:line:atam}
+ \ForAll  {$t \in \mf T$}:\label{alg:line:tstart}
+ \ForAll {$z \in \mf Z$}:\label{alg:line:createThetaStart}
+ \State $\Theta_g^t[z] \leftarrow 0$
+ \EndFor
+ \ForAll {$d \in D_g^t$}:
+ \ForAll {$w \in d$}:
+ \State $z \gets topic(w)$
+ \State $\Theta_g^t[z] \gets \Theta_g^t[z] + \frac{1}{|d|\times |D_g^t|}$
+ \EndFor
+ \EndFor\label{alg:line:createThetaEnd}
+ \EndFor
+ \State $\displaystyle t_{c} = \argmax_t{\ m(\Theta_g^{t-1},\ \Theta_g^{t})}$\label{alg:line:ThetaDiff}
+ \State $pre = [t_1\ ,\ t_{c-1}]$\label{alg:line:buildSeasonPre} 
+ \State $post = [t_{c}\ , \ t_{|\mf T|}]$\label{alg:line:buildSeasonPost} 
+ \ForAll {$s \in \{pre,\ post\}$}:\label{alg:line:predStart}
+ \State $A_g^t\approx A_g^{t-1}.M$
+ \State $M =(A_g^{t-1\intercal}A_g^{t-1})^{-1}A_g^{t-1\intercal}A_g^t$
+ %\State $M = A_g^{t-1}\textsuperscript{\textdagger}A_g^t=(A_g^{t-1\intercal}A_g^{t-1})^{-1}A_g^{t-1\intercal}A_g^t$
+ \EndFor\label{alg:line:predEnd}
+\EndFor\label{alg:line:end}
+\end{algorithmic}
+\end{algorithm}

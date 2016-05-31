@@ -1,0 +1,35 @@
+\section{Related Work}
+\label{sec:relwork}
+Social media has been used for a wide array of tasks including mental health
+assessment~\cite{twitter:anorexia,twitter:violence,twitter:mental}, 
+inferring political affiliation~\cite{twitter:elec,twitter:elec2,twitter:elec3,twitter:elec4}, and 
+brand perception~\cite{twitter:brand,twitter:brand2}.
+Previous studies on syndromic surveillance have attempted to uncover ailment topics in online
+discourse~\cite{DBLP:conf/nips/ChemuduguntaSS06,atam2} or model the
+evolution of general topics~\cite{DBLP:conf/kdd/WangAB12}. In this
+paper, we combine the best of both worlds which leads to the discovery
+of \emph{\texttt{ailment}}-\seasons for social-media active regions. %% We model
+%% the evolution of ailments within \seasons and obtain significant
+%% improvement over the previous state of the art for public health
+%% surveillance using social media.
+
+Our approach, TM-ATAM, builds on 
+TM-LDA for modeling general topic evolution over
+time~\cite{DBLP:conf/kdd/WangAB12}. Just like TM-LDA, TM-ATAM learns
+topic transitions over time and not topic trends. Other complementary approaches that learn
+the dynamicity of word distributions or topic trends have been
+proposed such as~\cite{DBLP:conf/icml/BleiL06, DBLP:conf/icdm/LinMHJD11, DBLP:conf/kdd/WangM06}. %% That is also the case of~\cite{DBLP:conf/icml/BleiL06} that
+%% models topic evolution over time as a discrete chain-style process
+%% where each piece is modeled using LDA. 
+
+In~\cite{DBLP:conf/icdm/DermoucheVKL14}, the authors model topics and their sentiments over time. Topic, sentiment and time are considered random variables. However, since different timestamps may be generated for every word in a single document, a multi-nomial distribution for modeling time is adopted. This choice may not be the best to model time. In \cite{DBLP:journals/ijcv/VaradarajanEO13}, documents are modeled as recurrent sequential patterns called motifs using a generative process. The contribution of the model is 3-fold: capture temporal order of words, detect recurrent and concurrent temporal activities and use a sparsity constraint. However, no prior distribution is used which gives LDA advantage over PLSA.
+In~\cite{DBLP:conf/kdd/WangM06}, the authors propose a method
+that learns changing word distributions of topics over time and
+in~\cite{DBLP:conf/icdm/LinMHJD11}, the authors leverage the structure
+of a social network to learn how topics temporally evolve in a
+community. Finally, in~\cite{DBLP:conf/wsdm/SahaS12}, non-negative
+factorization is used for learning topic trends. 
+
+Exploring the
+applicability of those complimentary approaches to the evolution of
+health topics in tweets, is a promising research direction.

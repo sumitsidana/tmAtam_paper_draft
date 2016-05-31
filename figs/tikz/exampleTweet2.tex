@@ -1,0 +1,24 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+\usepackage{verbatim}
+\begin{document}
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, text width=4.5em, text centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, text width=22em, text centered, minimum height=4em, anchor=north]
+\tikzstyle{block2} = [rectangle, draw, fill=blue!10, text width=25em, text centered, rounded corners, minimum height=4em, anchor=north]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,minimum height=2em]
+
+\begin{tikzpicture}[node distance = 2cm, auto]
+	\node [block][label={[label distance=.1em]-90:Example tweet}] (tweet) {``\emph{Neck pain and lower back pain for a pelvis and knee injury? Word ?!}"};
+	\node [block2, below=8mm, xshift=8mm][label={[label distance=.1em]-90:Topic vector, $\Theta$, produced by ATAM}] (Theta) at (tweet.south) {\textless Body Pain (0.88), Comparison (0.11)\ldots\textgreater};
+	\node [block2, below=30mm, xshift=8mm][label={[label distance=.1em]-90:Ailment vector, $\eta$, produced by ATAM}] (eta) at (tweet.south) {\textless BackPain (0.30), Allergies (0.06), Anxiety (0.01)\ldots\textgreater};
+	\node[] (marker) at (tweet.south west){};
+	\draw [line] (tweet.south west) -- (marker|-Theta) -- (Theta.west);
+	\path [line] (tweet.south west) -- (marker|-eta) -- (eta.west);
+\end{tikzpicture}
+
+
+\end{document}

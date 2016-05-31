@@ -1,0 +1,93 @@
+\documentclass[tikz,border=10pt]{standalone}
+%\documentclass{article}
+\usepackage{verbatim}
+\usepackage{tikz}
+
+\newcounter{wavenum}
+\setlength{\unitlength}{2cm}
+\newcommand*{\samba}{
+  \draw (0,0) node[above] {Date:2014-Oct-8} -- (1,0) node[above] {Date:2015-May-31};
+}
+
+\newcommand*{\bitvector}[2]{
+  \draw[fill=#2] (t_cur) -- ++(.0, .3) -- ++(#1-\coveredLength,0) -- ++(0, -.3)
+                         -- ++(.0,-.3) -- ++(-#1+\coveredLength,0) -- cycle;
+  \path (t_cur) -- node[anchor=mid] {} ++(#1-\coveredLength,0) node[time] (t_cur) {};
+  \def\coveredLength{#1}
+  
+}
+
+\newcommand*{\known}[1]{
+    \bitvector{#1}{white}
+}
+\newcommand*{\unknown}[1]{
+    \bitvector{#1}{black!20}
+}
+\newcommand*{\partiallyknown}[1]{
+    \bitvector{#1}{khaki}
+}
+
+% \nextwave{name}
+\newcommand{\nextwave}[1]{
+  \path (0,\value{wavenum}) node[left] {#1} node[time] (t_cur) {};
+  \addtocounter{wavenum}{-1}
+  \def\coveredLength{0}
+}
+
+% \clk{name}{period}
+\newcommand{\clk}[2]{
+    \nextwave{#1}
+    \FPeval{\res}{(\wavewidth+1)/#2}
+    \FPeval{\reshalf}{#2/2}
+    \foreach \t in {1,2,...,\res}{
+        \bit{\reshalf}{1}
+        \bit{\reshalf}{0}
+    }
+}
+
+% \begin{wave}[clkname]{num_waves}{clock_cycles}
+\newenvironment{wave}[3][]{
+  \begin{tikzpicture}[draw=black, yscale=0.6,xscale=8.0]
+    \tikzstyle{time}=[coordinate]
+    \setlength{\unitlength}{2cm}
+    \def\wavewidth{#3}
+    \setcounter{wavenum}{0}
+    \nextwave{#1}
+    %\foreach \t in {0,1,...,\wavewidth}{
+    %  \draw[dotted] (t_cur) +(0,.5) node[above] {w=\t} -- ++(0,.4-#2);
+    %  \clki
+    %}
+    \samba
+}{\end{tikzpicture}}
+
+%%% End of timing.sty
+\usepackage{verbatim}
+
+\begin{document}
+\begin{wave}{1}{34}
+ %\nextwave{req\_addr} \bit{0}{.2} \bit{1}{1} \bit{0}{3} \bit{1}{1} \bit{0}{.8}
+
+%\nextwave{arizona} \unknown{0.21} \known{1}
+\nextwave{Singapore} \known{0.5} \unknown{0.875}  \known{1}
+\nextwave{Dublin}\known{0.125} \unknown{0.75} \known{1}
+%\nextwave{Jakarta} \unknown{0.45} \known{1}
+\nextwave{JervisBay} \known{0.25} \unknown{0.375} \known{1}
+%\nextwave{Kuala} \unknown{0.33} \known{1}
+\nextwave{Manila} \known{0.625}\unknown{0.875} \known{1}
+\nextwave{texas} \known{0.125} \unknown{0.75} \known{1}
+
+%\nextwave{arizona} \unknown{0.21} \known{1}
+%\nextwave{california} \unknown{0.81} \known{1}
+%\nextwave{connecticut} \unknown{0.21} \known{1} 
+%\nextwave{illinois} \unknown{0.81} \known{1}
+%\nextwave{newjersey} \unknown{0.21} \known{1}
+%\nextwave{ohio} \unknown{0.81} \known{1}
+%\nextwave{oklahoma} \unknown{0.69} \known{1}
+%\nextwave{pennsylvania} \unknown{0.81} \known{1}
+%\nextwave{tennessee} \unknown{0.33} \known{1}
+%\nextwave{texas} \unknown{0.09} \known{1}
+
+\end{wave}
+
+\end{document}
+
