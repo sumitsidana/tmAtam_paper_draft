@@ -34,3 +34,6 @@
 *.bbl
 *.nav
 *.blg
+
+#pdf
+*.pdf

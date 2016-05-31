@@ -114,9 +114,10 @@ health campaigns.  Recently, Temporal-LDA (\tmlda) was proposed for
 efficiently modeling general-purpose topic transitions over time. In
 this paper, we propose Temporal Ailment Topic Aspect (\tmatam), a new
 latent model dedicated to capturing transitions that involve
-health-related topics. \tmatam learns topic transition parameters by
+health-related topics.  \tmatam learns topic transition parameters by
 minimizing the prediction error on topic distributions between
-consecutive posts at different time and geographic granularities. Our
+consecutive posts at different time and geographic granularities. We then 
+go on to propose \tatam, where time is treated as a random variable inside the \atam. Our
 experiments on an 8-month corpus of tweets show that \tmatam
 outperforms \tmlda in estimating transitions involving health-related
 topics for different geographic populations. Additionally, we examine
